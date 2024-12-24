@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Socket.IO Demo</title>
+		<script
+			defer
+			src="https://cdn.socket.io/4.8.1/socket.io.min.js"
+		></script>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<script defer type="module" src="./script.js"></script>
+	</head>
+	<body class="font-mono m-5">
+		<!-- Header -->
+		<div class="w-full text-center">
+			<h1 class="text-6xl">Socket.IO Demo</h1>
+
+			<h3 class="my-2">
+				Your socket ID is :
+				<span
+					id="socket-id"
+					class="text-green-500 underline cursor-pointer"
+				></span>
+			</h3>
+		</div>
+
+		<div class="grid grid-cols-4 gap-5 h-full mt-10">
+			<div class="border border-gray-400 p-2 rounded-lg">
+				<!-- Tile Header -->
+				<div>
+					<h2 class="3xl">io.emit()</h2>
+					<p class="text-xs italic text-gray-500">
+						Sends message to every connected socket
+					</p>
+
+					<div class="w-full">
+						<img
+							src="./img/io-emit.png"
+							alt="io-emit"
+							class="w-5/6 mx-auto"
+						/>
+					</div>
+				</div>
+				<!-- Tile Form -->
+				<div class="mt-3">
+					<input
+						id="io-emit-input"
+						placeholder="Enter message"
+						class="w-full border border-black rounded-md mb-2"
+						type="text"
+					/>
+					<button
+						id="io-emit-send"
+						class="p-2 text-xs bg-green-300 rounded-lg cursor-pointer"
+					>
+						Send
+					</button>
+				</div>
+			</div>
+			<div class="border border-gray-400 p-2 rounded-lg">
+				<!-- Tile Header -->
+				<div>
+					<h2 class="3xl">io.to() / io.in()</h2>
+					<p class="text-xs italic text-gray-500">
+						Sends message to every connected socket in a specified
+						room
+					</p>
+
+					<div class="w-full">
+						<img
+							src="./img/io-to-emit.png"
+							alt="io-emit"
+							class="w-3/5 mx-auto"
+						/>
+					</div>
+				</div>
+				<!-- Tile Form -->
+				<div class="mt-3">
+					<input
+						id="io-to-emit-room-input"
+						placeholder="Enter Room ID"
+						class="w-full border border-black rounded-md mb-2"
+						type="text"
+					/>
+					<input
+						id="io-to-emit-message-input"
+						placeholder="Enter message"
+						class="w-full border border-black rounded-md mb-2"
+						type="text"
+					/>
+					<button
+						id="io-to-emit-send"
+						class="p-2 text-xs bg-green-300 rounded-lg cursor-pointer"
+					>
+						Send
+					</button>
+				</div>
+			</div>
+			<div class="border border-gray-400 p-2 rounded-lg">
+				<!-- Tile Header -->
+				<div>
+					<h2 class="3xl">socket.join()</h2>
+					<p class="text-xs italic text-gray-500">
+						registers a socket to the specified room
+					</p>
+				</div>
+				<div class="mt-3">
+					<input
+						id="socket-join-input"
+						placeholder="Enter Room ID"
+						class="w-full border border-black rounded-md mb-2"
+						type="text"
+					/>
+					<button
+						id="socket-join-btn"
+						class="p-2 text-xs bg-green-300 rounded-lg cursor-pointer"
+					>
+						Join
+					</button>
+				</div>
+				<div class="mt-5">
+					<h2 class="3xl">socket.leave()</h2>
+					<p class="text-xs italic text-gray-500">
+						de-registers a socket to the specified room
+					</p>
+				</div>
+				<div>
+					<input
+						id="socket-leave-input"
+						placeholder="Enter Room ID"
+						class="w-full border border-black rounded-md my-2"
+						type="text"
+					/>
+					<button
+						id="socket-leave-btn"
+						class="p-2 text-xs bg-green-300 rounded-lg cursor-pointer"
+					>
+						Leave
+					</button>
+				</div>
+			</div>
+
+			<!-- Chat Feed -->
+			<div
+				class="border border-gray-400 p-2 rounded-lg row-span-2 overflow-wrap"
+			>
+				<!-- Tile Header -->
+				<div>
+					<h2 class="3xl">Chat Feed</h2>
+					<p class="text-xs italic text-gray-500">
+						All messages will appear here
+					</p>
+				</div>
+				<!-- Chat Feed -->
+				<div id="chat-feed" class="mt-3"></div>
+			</div>
+
+			<div class="border border-gray-400 p-2 rounded-lg">
+				<!-- Tile Header -->
+				<div>
+					<h2 class="3xl">socket.emit()</h2>
+					<p class="text-xs italic text-gray-500">
+						Sends an event and message
+					</p>
+
+					<div class="w-full">
+						<img
+							src="./img/socket-emit.png"
+							alt="io-emit"
+							class="w-3/5 mx-auto"
+						/>
+					</div>
+				</div>
+				<!-- Tile Form -->
+				<div class="mt-3">
+					<button
+						id="socket-emit-send"
+						class="p-2 text-xs bg-green-300 rounded-lg cursor-pointer"
+					>
+						Emit Event
+					</button>
+				</div>
+			</div>
+
+			<div class="border border-gray-400 p-2 rounded-lg">
+				<!-- Tile Header -->
+				<div>
+					<h2 class="3xl">socket.to()</h2>
+					<p class="text-xs italic text-gray-500">
+						Sends message to a specified socket / room in a
+						specified room except themselves
+					</p>
+
+					<div class="w-full">
+						<img
+							src="./img/socket-to.png"
+							alt="io-emit"
+							class="w-5/6 mx-auto"
+						/>
+					</div>
+				</div>
+				<!-- Tile Form -->
+				<div class="mt-3">
+					<input
+						id="socket-to-room-input"
+						placeholder="Enter Room / User ID"
+						class="w-full border border-black rounded-md mb-2"
+						type="text"
+					/>
+					<input
+						id="socket-to-message-input"
+						placeholder="Enter message"
+						class="w-full border border-black rounded-md mb-2"
+						type="text"
+					/>
+					<button
+						id="socket-to-send"
+						class="p-2 text-xs bg-green-300 rounded-lg cursor-pointer"
+					>
+						Send
+					</button>
+				</div>
+			</div>
+
+			<div class="border border-gray-400 p-2 rounded-lg">
+				<!-- Tile Header -->
+				<div>
+					<h2 class="3xl">socket.broadcast()</h2>
+					<p class="text-xs italic text-gray-500">
+						Sends message to a every other connected socket except
+						themselves
+					</p>
+
+					<div class="w-full">
+						<img
+							src="./img/socket-broadcast.png"
+							alt="io-emit"
+							class="w-5/6 mx-auto"
+						/>
+					</div>
+				</div>
+				<!-- Tile Form -->
+				<div class="mt-3">
+					<input
+						id="socket-broadcast-message-input"
+						placeholder="Enter message"
+						class="w-full border border-black rounded-md mb-2"
+						type="text"
+					/>
+					<button
+						id="socket-broadcast-send"
+						class="p-2 text-xs bg-green-300 rounded-lg cursor-pointer"
+					>
+						Broadcast
+					</button>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
